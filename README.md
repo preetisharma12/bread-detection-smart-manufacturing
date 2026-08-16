@@ -1,16 +1,19 @@
 # Bread Detection for Smart Manufacturing
 
-Before publishing this repo: this work was done at Fraunhofer IOSB-INA. Written confirmation from the supervisor/IP office that this can be public (code, write-up, and any images) has not yet been obtained. Confirmed directly: the trained model weights were produced using Fraunhofer's proprietary in-house bakery dataset, so the weights, the real detection images, and the real class names are intentionally withheld here, not just the raw dataset. Until confirmation is in hand, this repo intentionally contains no proprietary datasets, model weights, internal images, real metrics, or client-identifying details -- only a generic technical description of the approach, plus placeholders marked below for what will be filled in once cleared.
-
-One-line description: YOLO-based computer vision system that classifies bread products on a manufacturing line into 7 classes, developed for industrial bakery deployment.
+ YOLO-based computer vision system that classifies bread products on a manufacturing line into 7 classes, developed for industrial bakery deployment.
 
 ## Project Overview
 
-This project applies object detection to an industrial bakery use case: classifying bread products in real time on a production line. It was built as part of work in the AI & Industrial Automation group at Fraunhofer IOSB-INA.
+This project applies object detection to an industrial bakery use case: classifying bread products in real time on a production line.
+Automated bread detection and classification for bakery production lines using YOLO-based computer vision.
+Detects and classifies 7 different bread types in real-time.
+Reduces manual inspection and supports automated counting, sorting, and quality monitoring.
+Improves robustness across different camera distances, viewpoints, and production conditions.
+Uses Intel RealSense D455 for deployment in real-world bakery environments.
 
 ## Problem Statement
 
-Missing -- please provide. What specific problem does classification solve on the line: quality control, sorting, inventory counting, defect detection? The technical approach (YOLO-based classification across 7 bread classes) is documented below, but not yet the business/operational problem it addresses.
+A robust computer vision system is needed to automatically detect and classify bread products in real-world production conditions.
 
 ## Key Features
 
@@ -22,30 +25,55 @@ A camera feed is captured and served as a live MJPEG stream through a small web 
 
 ## Technologies
 
-PyTorch and Ultralytics YOLO for the detection model. A lightweight Python web framework for the live camera view and detection endpoint. OpenCV for camera capture and image processing.
+PyTorch and Ultralytics YOLO (yolo26m) for the detection model. A lightweight Python web framework for the live camera view and detection endpoint. OpenCV for camera capture and image processing.
 
 ## Dataset
 
-A custom dataset was collected and labeled in-house for 7 bread classes. Missing -- please provide (and consider before publishing): number of images per class, labeling tool used, and -- importantly -- whether this dataset or even sample images are allowed to be published. If not, this section should describe the dataset generically (e.g. "images captured on-site at a bakery production line, various lighting/angle conditions") without including the actual data.
+10,000 images collected and labeled in-house from a bakery production environment.
+Covers 7 bread classes with images captured at different heights, angles, backgrounds, and lighting conditions.
+Annotations were created using CVAT.
+Dataset designed to improve model robustness under real-world production conditions.
+Dataset/images are not publicly published due to confidentiality.
 
 ## Methodology
 
 Data collection and labeling across 7 bread classes, model training and fine-tuning with Ultralytics YOLO in PyTorch, deployment-condition testing (camera height, image quality, lighting/real-world variation), and evaluation via precision, recall, mAP, and confusion matrix. At inference time, the deployed system applies a fixed confidence/IoU threshold to filter detections and includes a human-in-the-loop correction mechanism: every detection is logged as both a raw image and a YOLO-format label file specifically so it can be manually corrected and reused as future training data.
 
-Missing -- please provide: which YOLO variant(s) were used, training hyperparameters, and how deployment testing was actually conducted (fixed test rig? live line?).
+YOLO variant - yolo26m 
+
+training hyperparameters
+
+yolo detect train \
+model=/data/pool/bhe-mk3/runs/bread_yolo26m/weights/best.pt \
+data=/data/pool/bhe-mk3/breadbakery/Bread.yolov8/data.yaml \
+epochs=120 \
+imgsz=640 \
+batch=16 \
+device=0 \
+workers=8 \
+patience=20 \
+project=/data/pool/bhe-mk3/runs \
+name=bread_yolo26m_finetune \
+optimizer=auto \
+hsv_h=0.01 \
+hsv_s=0.30 \
+hsv_v=0.15 \
+fliplr=0.5 \
+flipud=0.5 \
+degrees=5 \
+translate=0.05 \
+scale=0.10 \
+mosaic=0 \
+mixup=0 \
+copy_paste=0
 
 ## Installation
 
 Missing -- needs input once the codebase exists in a publishable form (dependency list, environment setup).
 
-## Usage
 
-Missing -- needs input, same caveat as above -- real commands once the codebase is reconstructed in a publishable form.
 
 ## Project Structure
-
-Recommended structure once rebuilt as a standalone public project:
-
 ```
 bread-detection-smart-manufacturing/
 ├── README.md
@@ -63,23 +91,18 @@ bread-detection-smart-manufacturing/
 
 ## Results
 
-Missing -- do not publish without real numbers. No precision/recall/mAP figures have been provided for this project, so none are included here.
+<img width="1920" height="1100" alt="val_batch1_pred" src="https://github.com/user-attachments/assets/2fb93ae5-4036-44ae-b9bf-7222f698cecb" />
+<img width="1920" height="1100" alt="val_batch1_pred" src="https://github.com/user-attachments/assets/311dcfe7-bbca-456d-9a8b-8358ea5e64d4" />
+
+
 
 ## Evaluation Metrics
 
-Metrics used: precision, recall, mAP, confusion matrix. Numeric results still needed.
-
-## Example Outputs
-
-Missing -- please provide, ideally sample detection images (with bounding boxes) using non-sensitive or synthetic examples if the real production images can't be published.
-
-## Limitations
-
-Missing -- please provide. Deployment challenges around camera height and image quality were mentioned; turning those into explicit, honest limitations (e.g. "accuracy drops under X lighting condition" or "requires camera mounted within Y range") is exactly the kind of engineering honesty that reads well to reviewers.
+Metrics used: precision, recall, mAP, confusion matrix. 
 
 ## Future Improvements
 
-Extending the active-learning feedback loop (correcting logged detections and retraining on them) into a more automated retraining pipeline. Beyond that: missing -- please provide any other improvements you have in mind.
+Extending the active-learning feedback loop (correcting logged detections and retraining on them) into a more automated retraining pipeline.
 
 ## License
 
@@ -88,4 +111,3 @@ MIT - see LICENSE.
 ## Author
 
 Preeti Sharma - Research Assistant, AI & Industrial Automation, Fraunhofer IOSB-INA, Lemgo, Germany.
-(Add any required Fraunhofer attribution/disclaimer language here once the supervisor confirms what's needed for a public repo.)
