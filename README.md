@@ -92,7 +92,13 @@ bread-detection-smart-manufacturing/
 ## Results
 
 <img width="1920" height="1100" alt="val_batch1_pred" src="https://github.com/user-attachments/assets/2fb93ae5-4036-44ae-b9bf-7222f698cecb" />
-<img width="1920" height="1100" alt="val_batch1_pred" src="https://github.com/user-attachments/assets/311dcfe7-bbca-456d-9a8b-8358ea5e64d4" />
+
+
+
+
+
+<img width="1920" height="1100" alt="val_batch2_labels" src="https://github.com/user-attachments/assets/a029ad43-a22c-4459-abab-21816140d41f" />
+
 
 
 
