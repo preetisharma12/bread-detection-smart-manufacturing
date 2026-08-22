@@ -116,4 +116,4 @@ MIT - see LICENSE.
 
 ## Author
 
-Preeti Sharma - Research Assistant, AI & Industrial Automation, Fraunhofer IOSB-INA, Lemgo, Germany.
+Preeti Sharma - Research Assistant, AI & Industrial Automation
